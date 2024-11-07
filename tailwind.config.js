@@ -3,8 +3,6 @@ module.exports = {
   content: [
     './*.php',
     './**/*.php',
-    './assets/js/**/*.js',
-    './assets/sass/**/*.sass',
   ],
   theme: {
     fontFamily: {
