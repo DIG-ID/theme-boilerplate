@@ -2,12 +2,12 @@
 get_header();
 if ( have_posts() ) :
 	do_action( 'before_main_content' );
+	the_archive_title( '<h1>', '</h1>' );
 	while ( have_posts() ) :
 		the_post();
 		do_action( 'before_post_content' );
 		?>
 		<h1><?php the_title(); ?></h1>
-		<div><?php the_content(); ?></div>
 		<?php
 		do_action( 'after_post_content' );
 	endwhile;

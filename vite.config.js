@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite';
-import path from 'path';
 
 export default defineConfig({
   root: './', // Set the root to your theme directory
@@ -7,9 +6,10 @@ export default defineConfig({
     outDir: 'dist', // Build the output in a "dist" folder
     assetsDir: '', // No subdirectory for assets
     rollupOptions: {
-      input: {
-        main: path.resolve(__dirname, 'assets/js/main.js'), // Entry point for your main JavaScript file
-      }
+      input: [
+        'src/js/main.js',
+        'src/sass/main.js',
+      ]
     }
   },
   server: {
