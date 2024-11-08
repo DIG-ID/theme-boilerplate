@@ -16,7 +16,7 @@ function starter_theme_setup() {
 	add_theme_support( 'custom-logo' );
 	add_theme_support( 'title-tag' );
 	add_theme_support( 'post-thumbnails' );
-	add_theme_support( 'post-formats' );
+	add_theme_support( 'post-formats', array( 'aside', 'gallery', 'link', 'image', 'quote', 'status', 'video', 'audio', 'chat' ) );
 	add_theme_support( 'html5', array( 'comment-list', 'comment-form', 'search-form', 'gallery', 'caption', 'style', 'script' ) );
 
 	// Add theme support for WooCommerce (if applicable).
@@ -95,14 +95,26 @@ function starter_theme_enqueue_styles() {
 	$the_theme     = wp_get_theme();
 	$theme_version = $the_theme->get( 'Version' );
 
-	// Register Theme main style.
-	wp_register_style( 'theme-styles', get_template_directory_uri() . '/dist/css/main.css', array(), $theme_version );
-	// Add styles inline.
-	wp_add_inline_style( 'theme-styles', starter_theme_get_font_face_styles() );
-	// Enqueue theme stylesheet.
-	wp_enqueue_style( 'theme-styles' );
 
-	wp_enqueue_script( 'theme-scripts', get_stylesheet_directory_uri() . '/dist/js/main.js', array( 'jquery' ), $theme_version, true );
+		// Use different paths for development and production.
+		if ( defined( 'WP_ENV' ) && WP_ENV === 'local' ) :
+			// Development (Vite server).
+			wp_enqueue_script( 'vite-main', 'http://localhost:3000/js/main.js', array(), null, true );
+		else :
+			// Production.
+			$manifest = json_decode( file_get_contents( get_template_directory() . '/dist/manifest.json' ), true );
+			wp_enqueue_style( 'theme-styles', get_template_directory_uri() . '/dist/' . $manifest['src/css/main.sass']['file'], array(), null );
+			wp_enqueue_script( 'theme-scripts', get_template_directory_uri() . '/dist/' . $manifest['src/js/main.js']['file'], array(), null, true );
+		endif;
+
+	// Register Theme main style.
+	//wp_register_style( 'theme-styles', get_template_directory_uri() . '/dist/css/main.css', array(), $theme_version );
+	// Add styles inline.
+	//wp_add_inline_style( 'theme-styles', starter_theme_get_font_face_styles() );
+	// Enqueue theme stylesheet.
+	//wp_enqueue_style( 'theme-styles' );
+
+	//wp_enqueue_script( 'theme-scripts', get_stylesheet_directory_uri() . '/dist/js/main.js', array( 'jquery' ), $theme_version, true );
 	/*if ( is_page_template( 'page-templates/page-kontakt.php' ) || is_admin() ) :
 		wp_enqueue_script( 'google-map-settings', get_stylesheet_directory_uri() . '/assets/js/google-maps.js', array( 'jquery' ), $theme_version, true );
 		wp_enqueue_script( 'google-map-api', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCB2RShyxiN7xPsQy1QI_SbqXXjW5p08S0&callback=initMap', array(), $theme_version, true );

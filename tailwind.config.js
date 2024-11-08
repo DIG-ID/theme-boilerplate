@@ -2,7 +2,10 @@
 module.exports = {
   content: [
     './*.php',
-    './**/*.php',
+    './inc/**/*.php',
+    './page-templates/*.php',
+    './template-parts/**/*.php',
+    './src/js/**/*.{js,jsx,ts,tsx}'
   ],
   theme: {
     fontFamily: {
